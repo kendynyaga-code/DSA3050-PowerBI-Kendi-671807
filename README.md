@@ -477,8 +477,6 @@ The page examines factors such as booking volume, lead time, cancellation behavi
 
 Interactive visuals allow users to explore the data through filtering and cross-filtering.
 
-![Detailed Analysis Dashboard]![alt text](11_dashboard_analysis.png)
-
 ---
 
 ## 11.3 Page 3 — Advanced / Diagnostic Analysis
@@ -486,8 +484,6 @@ Interactive visuals allow users to explore the data through filtering and cross-
 The Advanced/Diagnostic Analysis page investigates **why** booking outcomes may differ rather than only describing what happened.
 
 The analysis examines relationships between cancellation behavior and factors such as lead time, ADR, hotel type, and other booking characteristics.
-
-![Advanced Diagnostic Analysis Dashboard]![alt text](12_cancellation_and_diagnostic_analysis.png)
 
 ---
 
