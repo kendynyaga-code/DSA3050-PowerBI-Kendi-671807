@@ -97,9 +97,9 @@ The major transformations are summarized using:
 
 ### Power Query Evidence
 
-![Power Query Transformations](screenshots/02_power_query.png)
-
----
+![Power Query Transformations]![alt text](08_extracting_information_from_dates.png)
+we can see on the applied steps on the right side of the power query window
+I have more power query transformation screenshots under the screenshot folder
 
 ## 8. Data Modelling
 
