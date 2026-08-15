@@ -297,7 +297,7 @@ The transformed dataset contains more descriptive and business-friendly field na
 
 ---
 
-## 7.10 Power Query Transformation Summary
+### 7.10 Power Query Transformation Summary
 
 | # | Transformation | Purpose |
 | --- | --- | --- |
@@ -521,7 +521,7 @@ The measures were designed to answer the project's main analytical questions, pa
 
 ---
 
-## 8.1 DAX Measures Created
+### 9.1 DAX Measures Created
 
 | # | Measure | Purpose | Main DAX Concept |
 | --- | --- | --- | --- |
@@ -542,44 +542,44 @@ The measures were designed to answer the project's main analytical questions, pa
 
 ---
 
-## 8.2 Core DAX Measures
+##$ 9.2 Core DAX Measures
 
-### 8.2.1 Total Bookings
+### 9.2.1 Total Bookings
 
 **DAX:**
 `Total Bookings = COUNTROWS('Fact Hotel Bookings')`
 
 This measure counts the total number of booking records in the fact table. It provides the primary booking-volume KPI and forms the basis of several other business measures.
 
-### 8.2.2 Cancelled Bookings
+### 9.2.2 Cancelled Bookings
 
 **DAX:**
 `Cancelled Bookings = CALCULATE([Total Bookings], 'Fact Hotel Bookings'[Is Canceled] = 1)`
 
 This measure counts bookings where `Is Canceled` is equal to 1. The measure uses `CALCULATE()` to modify the filter context so that only cancelled bookings are included.
 
-### 8.2.3 Confirmed Bookings
+### 9.2.3 Confirmed Bookings
 
 **DAX:**
 `Confirmed Bookings = CALCULATE([Total Bookings], 'Fact Hotel Bookings'[Is Canceled] = 0)`
 
 This measure counts bookings that were not cancelled. It uses `CALCULATE()` to apply a filter where `Is Canceled` is equal to 0.
 
-### 8.2.4 Total Guests Measure
+### 9.2.4 Total Guests Measure
 
 **DAX:**
 `Total Guests Measure = SUM('Fact Hotel Bookings'[Total Guests])`
 
 This measure calculates the total number of guests across all bookings within the current filter context. The underlying `Total Guests` column was created during Power Query by combining the number of adults, children, and babies associated with each booking.
 
-### 8.2.5 Average ADR
+### 9.2.5 Average ADR
 
 **DAX:**
 `Average ADR = AVERAGE('Fact Hotel Bookings'[Average Daily Rate])`
 
 This measure calculates the average Average Daily Rate across bookings. ADR provides an indication of the daily price associated with hotel bookings and can be compared across hotels, time periods, customer types, and market segments.
 
-### 8.2.6 Average Stay Nights
+### 9.2.6 Average Stay Nights
 
 **DAX:**
 `Average Stay Nights = AVERAGE('Fact Hotel Bookings'[Total Stay Nights])`
@@ -588,9 +588,9 @@ This measure calculates the average number of nights per booking. The underlying
 
 ---
 
-## 8.3 Calculated Business Measures
+### 9.3 Calculated Business Measures
 
-### 8.3.1 Cancellation Rate %
+### 9.3.1 Cancellation Rate %
 
 **DAX:**
 `Cancellation Rate % = DIVIDE([Cancelled Bookings], [Total Bookings], 0)`
@@ -605,7 +605,7 @@ This measure calculates the average number of nights per booking. The underlying
 
 **Dashboard use:** This measure will be used as a major KPI on the Executive Overview page and as an analytical metric on the Cancellation and Diagnostic Analysis page.
 
-### 8.3.2 Average Guests per Booking
+### 9.3.2 Average Guests per Booking
 
 **DAX:**
 `Average Guests per Booking = DIVIDE([Total Guests Measure], [Total Bookings], 0)`
@@ -614,14 +614,14 @@ This measure calculates the average number of guests associated with each bookin
 
 The measure uses `DIVIDE()` to safely calculate the ratio while avoiding division-by-zero errors.
 
-### 8.3.3 Average Lead Time
+### 9.3.3 Average Lead Time
 
 **DAX:**
 `Average Lead Time = AVERAGE('Fact Hotel Bookings'[Lead Time])`
 
 This measure calculates the average number of days between the booking and the guest's arrival. Lead time is particularly useful when investigating cancellation behavior because bookings made far in advance may have different cancellation patterns from last-minute bookings.
 
-### 8.3.4 Special Request Rate %
+### 9.3.4 Special Request Rate %
 
 **DAX:**
 `Special Request Rate % = DIVIDE(CALCULATE([Total Bookings], 'Fact Hotel Bookings'[Special Requests] > 0), [Total Bookings], 0)`
@@ -634,9 +634,9 @@ This measure can be used to investigate customer behavior and service requiremen
 
 ---
 
-## 8.4 Advanced DAX Measures
+##$ 9.4 Advanced DAX Measures
 
-### 8.4.1 Previous Year Bookings
+### 9.4.1 Previous Year Bookings
 
 **DAX:**
 `Previous Year Bookings = CALCULATE([Total Bookings], SAMEPERIODLASTYEAR(DimDate[Date]))`
@@ -651,7 +651,7 @@ This measure can be used to investigate customer behavior and service requiremen
 
 **Dashboard use:** The measure will be used in time-based visuals on the Executive Overview and Booking Analysis pages.
 
-### 8.4.2 YoY Booking Growth %
+### 9.4.2 YoY Booking Growth %
 
 **DAX:**
 `YoY Booking Growth % = DIVIDE([Total Bookings] - [Previous Year Bookings], [Previous Year Bookings], 0)`
@@ -681,7 +681,7 @@ This measure can be used to investigate customer behavior and service requiremen
 
 **Dashboard use:** The measure can be used in category-level visuals, such as comparing booking contribution between the Resort Hotel and City Hotel.
 
-### 8.4.4 Hotel Booking Rank
+### 9.4.4 Hotel Booking Rank
 
 **DAX:**
 `Hotel Booking Rank = RANKX(ALLSELECTED(DimHotel[Hotel]), [Total Bookings], , DESC, DENSE)`
@@ -698,7 +698,7 @@ This measure can be used to investigate customer behavior and service requiremen
 
 ---
 
-## 8.5 Six Most Important DAX Measures
+##$ 9.5 Six Most Important DAX Measures
 
 The following six measures were selected for detailed documentation because they are the most directly connected to the project's business questions and dashboard analysis.
 
@@ -776,7 +776,7 @@ The following six measures were selected for detailed documentation because they
 
 ---
 
-## 8.6 Summary of Advanced DAX Techniques
+### 9.6 Summary of Advanced DAX Techniques
 
 The DAX solution demonstrates several advanced concepts required by the examination brief.
 
@@ -791,3 +791,270 @@ The DAX solution demonstrates several advanced concepts required by the examinat
 | Filter context | Multiple measures | Allows results to dynamically respond to slicers and report selections |
 
 The DAX calculations therefore move beyond simple aggregation and provide business-oriented metrics that respond dynamically to the analytical context of the Power BI report. The measures will form the quantitative foundation of the interactive dashboards developed in the next stage of the project.
+
+---
+
+---
+
+## 10. Professional Power BI Dashboards
+
+The final Power BI report was developed as a three-page interactive dashboard following the progression:
+
+### Executive Overview → Detailed Analysis → Advanced/Diagnostic Analysis
+
+The dashboard was designed to move from understanding overall hotel booking performance to investigating specific booking patterns and finally identifying factors associated with cancellation behavior and other important business outcomes.
+
+The report uses a consistent visual theme, KPI cards, charts, slicers, and interactive filtering to communicate the main findings from the hotel booking dataset.
+
+---
+
+### 10.1 Dashboard Design Approach
+
+The dashboard was designed according to the following principles:
+
+- Clear visual hierarchy
+- Consistent formatting and spacing
+- Consistent color palette
+- Appropriate visual selection
+- KPI-driven presentation
+- Interactive filtering
+- Business-oriented storytelling
+- Minimal visual clutter
+- Clear progression from overview to detailed analysis
+
+The report follows the analytical storytelling approach:
+
+> **What happened? → Where did it happen? → Why is it happening? → What requires attention?**
+
+Users can interact with the report using slicers and cross-filtering to investigate the results across different hotels, time periods, customer types, and other booking characteristics.
+
+---
+
+### 10.2 Page 1 – Executive Overview
+
+The **Executive Overview** page provides a high-level summary of hotel booking performance.
+
+The purpose of this page is to allow a manager or decision-maker to understand the major characteristics of the dataset and the overall booking situation quickly without having to examine individual records.
+
+### Key information presented
+
+The page includes KPI cards and visualizations covering:
+
+- Total Bookings
+- Cancelled Bookings
+- Cancellation Rate
+- Average Daily Rate (ADR)
+- Average Stay Nights
+- Total Guests
+- Booking trends over time
+- Hotel-level comparisons
+- Booking distribution across important categories
+
+Interactive slicers allow users to investigate the KPIs and visualizations according to relevant dimensions such as hotel and time period.
+
+### Business purpose – Executive Overview
+
+The Executive Overview answers questions such as:
+
+- How many bookings were recorded?
+- How many bookings were cancelled?
+- What is the overall cancellation rate?
+- What is the average booking price?
+- How long do guests typically stay?
+- How does booking activity change over time?
+- How do the City Hotel and Resort Hotel compare?
+
+This page provides management with an immediate understanding of overall hotel booking performance.
+
+### Screenshot: Executive Overview Dashboard
+
+The completed Executive Overview dashboard is documented in the project screenshots as:
+
+`screenshots/10_dashboard_overview.png`
+
+---
+
+### 10.3 Page 2 – Detailed Booking Analysis
+
+The **Detailed Booking Analysis** page provides a deeper examination of booking behavior and the characteristics associated with hotel reservations.
+
+While the Executive Overview focuses on the overall picture, this page allows users to investigate specific patterns across booking characteristics and customer-related dimensions.
+
+### Key areas of analysis – Detailed Booking
+
+The page includes visualizations examining:
+
+- Booking volume by hotel
+- Booking patterns over time
+- Booking lead time
+- Cancellation behavior
+- Average Daily Rate (ADR)
+- Customer and market segment patterns
+- Length of stay
+- Other relevant booking characteristics
+
+Interactive filters allow the user to investigate these patterns for different hotels and time periods.
+
+### Business purpose – Detailed Booking Analysis
+
+This page helps answer questions such as:
+
+- Which hotel receives more bookings?
+- How does booking lead time vary across booking groups?
+- How does ADR differ between booking categories?
+- How do customer and market segments contribute to booking volume?
+- How do length-of-stay patterns differ between hotels?
+- What booking characteristics are associated with higher cancellation levels?
+
+The page therefore moves from the high-level performance shown on the Executive Overview to more detailed analysis of booking behavior.
+
+### Screenshot: Detailed Booking Analysis Dashboard
+
+The completed Detailed Booking Analysis dashboard is documented in the project screenshots as:
+
+`screenshots/11_dashboard_analysis.png`
+
+---
+
+### 10.4 Page 3 – Advanced / Diagnostic Analysis
+
+The **Advanced/Diagnostic Analysis** page investigates relationships and patterns that may help explain hotel booking outcomes.
+
+Rather than only showing what happened, this page focuses on identifying potential factors associated with important outcomes, particularly cancellation behavior.
+
+One of the key analytical relationships investigated is the relationship between **lead time, ADR, and cancellation rate**.
+
+### Key areas of analysis – Advanced / Diagnostic
+
+The page includes analysis of:
+
+- Cancellation rate by lead time
+- Cancellation rate across booking characteristics
+- ADR and cancellation behavior
+- Hotel-level cancellation differences
+- Customer and market segment cancellation patterns
+- Other diagnostic relationships relevant to booking outcomes
+
+### Business purpose – Advanced / Diagnostic Analysis
+
+This page helps answer questions such as:
+
+- Does cancellation behavior change as booking lead time increases?
+- Are bookings with longer lead times associated with higher cancellation rates?
+- How does ADR relate to cancellation behavior?
+- Which hotel or customer segments experience higher cancellation rates?
+- Which booking characteristics may require further management attention?
+
+The purpose is not to claim that these relationships prove causation, but rather to identify **patterns and areas that may warrant further investigation**.
+
+### Screenshot: Advanced / Diagnostic Analysis Dashboard
+
+The completed Advanced/Diagnostic Analysis dashboard is documented in the project screenshots as:
+
+`screenshots/12_cancellation_and_diagnostic_analysis.png`
+
+---
+
+### 10.5 Dashboard Interactivity
+
+The Power BI report incorporates interactive features to allow users to explore the analysis rather than viewing only static results.
+
+### Slicers
+
+Slicers allow users to filter the report according to relevant dimensions such as:
+
+- Hotel
+- Year
+- Month
+- Customer Type
+- Other available booking characteristics
+
+### Cross-filtering
+
+Power BI's cross-filtering functionality allows selections made in one visual to affect related visuals on the same report page.
+
+For example, selecting a particular hotel allows users to investigate how its booking volume, cancellation rate, ADR, and other metrics compare with the overall results.
+
+### Dynamic analytical context
+
+The DAX measures were designed to respond to the current filter context. Therefore, KPI cards and analytical measures can change dynamically when users interact with slicers and visuals.
+
+This allows users to move from overall performance to specific subsets of the hotel booking data.
+
+---
+
+### 10.6 Dashboard Storytelling
+
+The three report pages were designed to provide a logical analytical flow:
+
+| Page | Focus | Main Question |
+| --- | --- | --- |
+| Page 1 – Executive Overview | Overall performance | **What happened?** |
+| Page 2 – Detailed Analysis | Booking and customer patterns | **Where and how did it happen?** |
+| Page 3 – Advanced/Diagnostic Analysis | Cancellation and behavioral relationships | **Why might it be happening?** |
+
+This structure allows the user to begin with the overall performance of the hotels, investigate important booking patterns, and then move toward deeper diagnostic analysis.
+
+The dashboard therefore follows the intended progression of:
+
+> **Overview → Detailed Analysis → Deeper Insights**
+
+---
+
+### 10.7 Key Dashboard Insights
+
+The dashboards provide several important observations from the hotel booking data.
+
+### Booking Volume
+
+The dataset contains **119,390 booking records**, providing a substantial basis for comparing booking behavior across the City Hotel and Resort Hotel.
+
+### Cancellation Behavior
+
+Cancellation rate is one of the primary KPIs in the report. The dashboard allows cancellation behavior to be examined across hotels, time periods, customer types, market segments, and lead-time categories.
+
+### Pricing
+
+Average Daily Rate (ADR) is used to investigate differences in booking prices across hotels and other booking characteristics.
+
+### Length of Stay
+
+Total Stay Nights and Average Stay Nights provide insight into the duration of hotel visits and allow comparisons between different booking groups.
+
+### Booking Lead Time
+
+Lead time is examined as an important booking characteristic and is used in the diagnostic analysis to investigate its relationship with cancellation behavior.
+
+These insights are presented interactively in the Power BI report rather than being limited to a single static summary.
+
+---
+
+### 10.8 Dashboard Screenshots
+
+The following screenshots provide evidence of the completed Power BI report:
+
+| Screenshot | Description |
+| --- | --- |
+| `screenshots/10_dashboard_overview.png` | Executive Overview |
+| `screenshots/11_dashboard_analysis.png` | Detailed Booking Analysis |
+| `screenshots/12_cancellation_and_diagnostic_analysis.png` | Advanced / Diagnostic Analysis |
+
+The screenshots demonstrate the final dashboard design, visualizations, KPIs, and analytical outputs produced using Power BI.
+
+---
+
+### 10.9 Final Dashboard Outcome
+
+The completed Power BI solution combines:
+
+- Power Query data preparation
+- Star-schema data modelling
+- DAX business calculations
+- Interactive visualizations
+- KPI reporting
+- Detailed booking analysis
+- Diagnostic analysis
+
+The final report transforms the raw hotel booking dataset into an interactive business intelligence solution that can be used to investigate booking performance, cancellation behavior, customer patterns, pricing, and length-of-stay characteristics.
+
+---
