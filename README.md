@@ -95,12 +95,6 @@ The major transformations are summarized using:
 | 8 | Extracting date attributes | Additional time attributes were required | Extracted Year, Month, and Quarter from `Arrival Date` | Enabled time-based analysis |
 | 9 | Renaming fields | Raw fields used technical naming conventions | Renamed relevant fields using descriptive names | Improved readability |
 
-### Power Query Evidence
-
-![Power Query Transformations]![alt text](08_extracting_information_from_dates.png)
-we can see on the applied steps on the right side of the power query window
-I have more power query transformation screenshots under the screenshot folder
-
 ## 8. Data Modelling
 
 A **star-schema-based analytical model** was developed in Power BI.
@@ -146,12 +140,6 @@ The model uses one-to-many relationships with **single-direction filtering** fro
 | `DimCustomer` | `FactHotelBookings` | 1:* | Single |
 
 This structure provides a clear analytical model while avoiding unnecessary many-to-many and bidirectional relationships.
-
-### Data Model Evidence
-
-![Power BI Data Model]![alt text](09_model.png)
-
----
 
 ## 9. DAX & Business Calculations
 
@@ -477,9 +465,7 @@ Three report pages were developed following the required progression:
 
 The Executive Overview provides management with a high-level view of hotel booking performance.
 
-The page includes KPI cards, booking trends, cancellation performance, hotel comparisons, key booking indicators, and interactive slicers.
-
-![Executive Overview Dashboard]![alt text](10_dashboard_overview.png)
+The page includes KPI cards, booking trends, cancellation performance, hotel comparisons, key booking indicators, and interactive slicers
 
 ---
 
