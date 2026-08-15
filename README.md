@@ -312,3 +312,199 @@ The transformed dataset contains more descriptive and business-friendly field na
 | 9 | Renaming fields appropriately | Improved field readability and business interpretation |
 
 The completed Power Query transformations prepared the raw hotel booking
+
+---
+
+## 8. Data Modelling
+
+The cleaned hotel booking dataset was transformed into a **star-schema-based analytical model** in Power BI. The model consists of a central fact table containing booking-level records and supporting dimension tables containing descriptive attributes used to filter and analyze the bookings.
+
+The model was designed to provide a clear separation between booking information and descriptive attributes while avoiding unnecessary many-to-many relationships, ambiguous filter paths, and inappropriate bidirectional relationships.
+
+---
+
+### 8.1 Fact Table
+
+The main fact table is **`FactHotelBookings`**.
+
+This table contains the individual hotel booking records and forms the centre of the analytical model. Each row represents a booking record and contains the numerical and categorical information required for analysis.
+
+Important fields in the fact table include:
+
+- `hotel`
+- `is_canceled`
+- `lead_time`
+- `Arrival Date`
+- `Total Stay Nights`
+- `Total Guests`
+- `market_segment`
+- `customer_type`
+- `adr`
+- `reservation_status`
+- `total_of_special_requests`
+
+#### Why the Fact Table Was Selected
+
+`FactHotelBookings` was selected as the fact table because the dataset is structured at the **individual booking level**. It contains the numerical and categorical information required to calculate business KPIs and analyze booking behavior.
+
+The table therefore acts as the central source of booking-level information, while the dimension tables provide descriptive attributes for filtering and grouping the bookings.
+
+---
+
+### 8.2 DimHotel
+
+The **`DimHotel`** table was created to contain the unique hotel categories in the dataset.
+
+The dimension contains the following hotel types:
+
+- City Hotel
+- Resort Hotel
+
+#### Why DimHotel Was Created
+
+Hotel type is an important analytical dimension because many of the business questions involve comparing the performance and booking behavior of the City Hotel and Resort Hotel.
+
+Separating hotel information into a dimension allows hotel-level filtering to be handled consistently and avoids unnecessary repetition of descriptive hotel categories in the analytical model.
+
+---
+
+### 8.3 DimCustomer
+
+The **`DimCustomer`** table was created using the unique `Customer Type` categories available in the dataset.
+
+The dimension allows bookings to be analyzed according to customer type, including categories such as:
+
+- Contract
+- Group
+- Transient
+- Transient-Party
+
+#### Why DimCustomer Was Created
+
+Customer type is an important descriptive attribute for understanding booking behavior and cancellation patterns.
+
+The dimension allows users to filter and compare booking metrics across different customer types without duplicating the same customer-type categories throughout the model.
+
+The source dataset does not contain a unique customer identifier. Therefore, `DimCustomer` represents **customer types rather than individual customers**.
+
+---
+
+### 8.4 DimDate
+
+A dedicated **`DimDate`** table was created to support time-based analysis.
+
+The Date dimension contains:
+
+- `Date`
+- `Year`
+- `Month Number`
+- `Month`
+- `Quarter`
+
+The date range was generated from the minimum and maximum `Arrival Date` values in the booking data.
+
+#### Why DimDate Was Created
+
+The hotel booking dataset contains arrival dates and supports analysis of booking patterns over time.
+
+A dedicated Date dimension allows the report to consistently analyze bookings by:
+
+- Year
+- Month
+- Quarter
+- Date
+
+It also provides a reliable foundation for time-based DAX calculations.
+
+The `DimDate` table was marked as the dedicated Date Table in Power BI.
+
+---
+
+### 8.5 Relationships
+
+One-to-many relationships were established between each dimension and the central fact table.
+
+| Dimension Table | Fact Table | Relationship | Cardinality | Filter Direction |
+| --- | --- | --- | --- | --- |
+| `DimDate` | `FactHotelBookings` | `Date` → `Arrival Date` | 1:* | Single |
+| `DimHotel` | `FactHotelBookings` | `Hotel` → `hotel` | 1:* | Single |
+| `DimCustomer` | `FactHotelBookings` | `Customer Type` → `customer_type` | 1:* | Single |
+
+The dimension tables are on the **one side** of each relationship because each dimension contains unique category or date values. The fact table is on the **many side** because the same hotel, customer type, or date can occur across many booking records.
+
+---
+
+### 8.6 Cardinality Decisions
+
+A **one-to-many (1:*)** relationship was selected for all dimension-to-fact relationships.
+
+This structure reflects the nature of the data:
+
+- One hotel can have many bookings.
+- One customer type can be associated with many bookings.
+- One date can have many bookings.
+
+Using one-to-many relationships avoids unnecessary many-to-many relationships and provides a clear flow of information from the dimensions to the booking fact table.
+
+---
+
+### 8.7 Filter Direction Decisions
+
+All dimension-to-fact relationships use **single-direction filtering**.
+
+The filter flows from the dimension table to the `FactHotelBookings` table.
+
+For example, selecting **City Hotel** in a report filters the relevant booking records in the fact table.
+
+Single-direction filtering was selected because it is sufficient for the analytical requirements of the model and reduces the risk of ambiguous filter paths.
+
+Bidirectional filtering was avoided because it is unnecessary for this model and could introduce unwanted interactions between tables.
+
+---
+
+### 8.8 Data Types and Naming
+
+Appropriate data types were established during the Power Query data preparation stage.
+
+The model uses:
+
+- Date data types for date fields.
+- Numeric data types for numerical variables and measures.
+- Text data types for categorical attributes.
+
+Clear naming conventions were also used to distinguish between fact and dimension tables:
+
+- `FactHotelBookings`
+- `DimHotel`
+- `DimCustomer`
+- `DimDate`
+
+Descriptive field names were used where appropriate to improve readability and make the model easier for business users to understand.
+
+---
+
+### 8.9 Modelling Challenges
+
+One modelling challenge was that the original dataset does not contain a unique booking identifier or individual customer identifier.
+
+Because there is no unique customer ID, an individual customer dimension could not be reliably created. Instead, `DimCustomer` was based on the available `Customer Type` attribute.
+
+Another consideration was the presence of separate arrival year, month, and day fields in the raw dataset. These were first combined into the `Arrival Date` field during Power Query transformation. The redundant raw date components were then removed from the main fact table, and a dedicated `DimDate` table was created for time-based analysis.
+
+These decisions were made to maintain a clear and technically defensible analytical model while avoiding unnecessary dimensions and relationships.
+
+---
+
+### 8.10 Final Model Structure
+
+The final model follows a star-schema structure:
+
+#### DimDate → FactHotelBookings ← DimHotel
+
+#### DimCustomer → FactHotelBookings
+
+`FactHotelBookings` forms the centre of the model, while `DimDate`, `DimHotel`, and `DimCustomer` provide descriptive attributes used to filter and analyze booking-level information.
+
+The model uses one-to-many relationships with single-direction filtering and avoids unnecessary many-to-many or bidirectional relationships.
+
+A screenshot of the completed **Power BI Model View** is included in the project documentation.
